@@ -14,9 +14,7 @@ const DealsChart = () => {
     resource: 'dealStages',
     filters: [
       {
-        field: 'title',
-        operator: 'in',
-        value: ['WON', 'LOST']
+        field: 'title', operator: 'in', value: ['WON', 'LOST']
       }
     ],
     meta: {
@@ -55,13 +53,13 @@ const DealsChart = () => {
           value: `$${Number(data.value) / 1000}k`
         }
       }
-    }
-  };
+    },
+  }
 
   return (
     <Card
-      style={{ height: '100%'}}
-      headStyle={{ padding: '8px 16px'}}
+      style={{ height: '100%' }}
+      headStyle={{ padding: '8px 16px' }}
       bodyStyle={{ padding: '24px 24px 0 24px'}}
       title={
         <div
@@ -72,16 +70,13 @@ const DealsChart = () => {
           }}
         >
           <DollarOutlined />
-          <Text
-            size='sm'
-            style={{marginLeft: '0.5rem'}}
-          >
+          <Text size="sm" style={{ marginLeft: '0.5rem'}}>
             Deals
           </Text>
         </div>
       }
     >
-      <Area {...config} height={325} />
+      <Area {...config} height={325}  />
     </Card>
   )
 }
