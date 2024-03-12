@@ -1,7 +1,7 @@
 import { User } from '@/graphql/schema.types'
 import React from 'react'
 
-type ProjectCardPrps {
+type ProjectCardPrps = {
   id: string,
   title: string,
   updatedAt: string,
