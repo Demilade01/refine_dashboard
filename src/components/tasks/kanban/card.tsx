@@ -5,6 +5,7 @@ import { TextIcon } from '@/components/text-icon'
 import { User } from '@/graphql/schema.types'
 import { getDateColor } from '@/utilities'
 import { ClockCircleOutlined, DeleteOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons'
+import { useDelete, useNavigation } from '@refinedev/core'
 import { Button, Card, ConfigProvider, Dropdown, MenuProps, Space, Tag, Tooltip, theme } from 'antd'
 import dayjs from 'dayjs'
 import React, { memo, useMemo } from 'react'
@@ -25,7 +26,8 @@ type ProjectCardPrps = {
 const ProjectCard = ({ id, title, dueDate, users}: ProjectCardPrps) => {
   const { token } = theme.useToken()
 
-  const edit = () => {}
+  const { edit } = useNavigation();
+  const { mutate } = useDelete();
 
   const dropdownItems = useMemo(() => {
     const dropdownItems: MenuProps['items'] = [
@@ -34,7 +36,7 @@ const ProjectCard = ({ id, title, dueDate, users}: ProjectCardPrps) => {
         key: '1',
         icon: <EyeOutlined />,
         onClick: () => {
-          edit()
+          edit('tasks', id, 'replace')
         }
       },
       {
@@ -42,7 +44,15 @@ const ProjectCard = ({ id, title, dueDate, users}: ProjectCardPrps) => {
         label: 'Delete card',
         key: '2',
         icon:<DeleteOutlined />,
-        onClick: () => {}
+        onClick: () => {
+          mutate({
+            resource: 'tasks',
+            id,
+            meta: {
+              operation: 'task'
+            }
+          })
+        }
       }
     ]
 
@@ -76,12 +86,18 @@ const ProjectCard = ({ id, title, dueDate, users}: ProjectCardPrps) => {
       <Card
         size="small"
         title={<Text ellipsis={{tooltip: title}} >{title}</Text>}
-        onClick={() => edit()}
+        onClick={() => edit('tasks', id, 'replace')}
         extra={
           <Dropdown
             trigger={["click"]}
             menu={{
               items: dropdownItems,
+              onPointerDown: (e) => {
+                e.stopPropagation()
+              },
+              onClick: (e) => {
+                e.domEvent.stopPropagation()
+              }
             }}
             placement='bottom'
             arrow={{ pointAtCenter: true}}
